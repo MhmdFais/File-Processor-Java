@@ -1,5 +1,7 @@
 package main;
 
+import gui.MainGUI;
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -38,20 +40,34 @@ public class FileProcessor {
             executor.shutdown();
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            MainGUI.resultTextArea.setText("Error occurred while waiting for threads to finish: " + e.getMessage());
         }
 
-        // Print processing results (implement this based on your chosen analysis)
+        // Print processing results
         printProcessingResults();
+        //update UI
+        updateResultsUI();
     }
 
-    private void printProcessingResults() {
-        // This method should iterate through the 'threads' list and print the results
-        // obtained from each FileProcessorThread object. The specific format of the
-        // results may vary depending on your chosen analysis.
+    private void updateResultsUI() {
+        StringBuilder results = new StringBuilder();
+
         for (FileProcessorThread thread : threads) {
-            // Implement logic to retrieve and print results from each thread
-            System.out.println(thread.getResults()); // Replace with your implementation
+            int wordCount = thread.getWordCount().size();
+            int characterCount = thread.getCharCount().size();
+
+            results.append("File: ").append(thread.getFileName()).append("\n");
+            results.append("Word count: ").append(wordCount).append("\n");
+            results.append("Character count: ").append(characterCount).append("\n\n");
+        }
+
+        MainGUI.resultTextArea.setText(results.toString()); // Update the text area in the UI
+    }
+
+    public void printProcessingResults() {
+        // This method is to iterate through the 'threads' list and print the results
+        for (FileProcessorThread thread : threads) {
+            thread.getResults();
         }
     }
 }

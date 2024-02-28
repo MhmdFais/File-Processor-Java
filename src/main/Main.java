@@ -12,6 +12,7 @@ public class Main {
         FileProcessor fileProcessor = new FileProcessor(directoryPath);
         fileProcessor.processFiles();
 
+        System.out.println();
         System.out.println("Processing complete!");
     }
 
@@ -21,3 +22,4 @@ public class Main {
         return scanner.nextLine();
     }
 }
+
